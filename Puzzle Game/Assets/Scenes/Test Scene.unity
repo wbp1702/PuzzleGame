@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 42103177}
   - component: {fileID: 42103176}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Duplication Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 435196968}
   - component: {fileID: 435196972}
   m_Layer: 3
-  m_Name: Cube (2)
+  m_Name: Floating Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -830,7 +830,7 @@ GameObject:
   - component: {fileID: 878432164}
   - component: {fileID: 878432163}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Duplication Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1194,7 +1194,7 @@ GameObject:
   - component: {fileID: 1089605347}
   - component: {fileID: 1089605346}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1401,7 +1401,7 @@ GameObject:
   - component: {fileID: 1196871150}
   - component: {fileID: 1196871149}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Room 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1620,7 +1620,7 @@ GameObject:
   - component: {fileID: 1553160048}
   - component: {fileID: 1553160047}
   m_Layer: 0
-  m_Name: TpCube (1)
+  m_Name: Teleport Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1655,6 +1655,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalScale: 0.5
   relativeDestination: {fileID: 1700116877}
+  duplicationVolume: {fileID: 878432163}
 --- !u!65 &1553160048
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1794,7 +1795,7 @@ GameObject:
   - component: {fileID: 1700116880}
   - component: {fileID: 1700116879}
   m_Layer: 0
-  m_Name: TpCube
+  m_Name: Teleport Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1829,6 +1830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalScale: 2
   relativeDestination: {fileID: 1553160045}
+  duplicationVolume: {fileID: 42103176}
 --- !u!65 &1700116880
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1863,7 +1865,7 @@ GameObject:
   - component: {fileID: 1852454699}
   - component: {fileID: 1852454698}
   m_Layer: 0
-  m_Name: Plane (1)
+  m_Name: Room 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
