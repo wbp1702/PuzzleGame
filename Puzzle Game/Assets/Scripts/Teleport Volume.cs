@@ -32,30 +32,39 @@ public class TeleportVolume : MonoBehaviour
         {
             if (collider.bounds.Contains(other.gameObject.transform.position))
             {
-                Rigidbody rigidbody = other.GetComponent<Rigidbody>();
+                CharacterController controller = other.GetComponent<CharacterController>();
 
                 var relativePosition = transform.InverseTransformPoint(other.transform.position);
                 Quaternion relativeRotation = Quaternion.FromToRotation(transform.forward, relativeDestination.transform.forward);
 
                 var desiredLossy = globalScale * other.transform.lossyScale;
 
+                if (controller) controller.enabled = false;
+
                 other.transform.localScale = Vector3.one;
                 var otherScale = other.transform.lossyScale;
 
                 other.transform.localScale = new Vector3(otherScale.x * desiredLossy.x, otherScale.y * desiredLossy.y, otherScale.z * desiredLossy.z);
-
-                var velocity = rigidbody.velocity * globalScale;
-                var angularVelocity = rigidbody.angularVelocity;
-
-                rigidbody.isKinematic = true;
                 other.transform.position = relativeDestination.transform.TransformPoint(relativePosition);
                 other.transform.rotation = relativeRotation * other.transform.rotation;
-                rigidbody.isKinematic = false;
-                rigidbody.velocity = relativeRotation * velocity;
-                rigidbody.angularVelocity = relativeRotation * angularVelocity;
 
-                if (duplicationVolume) duplicationVolume.AddDuplicate(other.gameObject);
+                if (controller) controller.enabled = true;
+
+                Rigidbody rigidbody = other.GetComponent<Rigidbody>();
+                if (rigidbody)
+				{
+                    var velocity = rigidbody.velocity * globalScale;
+                    var angularVelocity = rigidbody.angularVelocity;
+
+                    rigidbody.isKinematic = true;
+                    rigidbody.velocity = relativeRotation * velocity;
+                    rigidbody.angularVelocity = relativeRotation * angularVelocity;
+                    rigidbody.isKinematic = false;
+				}
+
+                if (!controller && duplicationVolume) duplicationVolume.AddDuplicate(other.gameObject);
                 //Debug.Break();
+
                 return;
             }
         }

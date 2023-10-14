@@ -18,11 +18,6 @@ public class Player : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private float NormalizeAngle(float a)
-    {
-        return a - 180f * Mathf.Floor((a + 180f) / 180f);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -41,23 +36,15 @@ public class Player : MonoBehaviour
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * angularSpeed;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * angularSpeed;
 
-        //float xRotation = NormalizeAngle(camera.transform.localEulerAngles.x);
-        //float yRotation = NormalizeAngle(transform.localEulerAngles.y);
         float xRotation = camera.transform.localEulerAngles.x;
 		float yRotation = transform.localRotation.eulerAngles.y;
 
 		yRotation += mouseX;
 
         xRotation -= mouseY;
-        if (mouseY != 0)
-		{
-            //xRotation = Mathf.Clamp(xRotation - 180f, -90f, 90f) + 180f;
-		}
+        
 
         transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
         camera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        //rigidbody.AddForce(movement * Time.deltaTime);
-        //transform.localEulerAngles += new Vector3(0f, mouseX, 0f);
-        //camera.transform.localEulerAngles = new(, 0, 0);
     }
 }
