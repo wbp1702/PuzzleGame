@@ -4,47 +4,64 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Camera camera;
-    public float speed = 1.0f;
-    public float angularSpeed = 1.0f;
+    public Camera playerCamera;
+    public Transform holdPoint;
+    public float maxReach = 5.0f;
+    public float mouseSensitivity = 100f;
+    public float moveSpeed = 10f;
 
-    private Rigidbody rigidbody;
+    private CharacterController controller;
+    private float cameraPitch = 0f;
+    private Rigidbody heldObject;
 
-    // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector3 movement = new();
-        if (Input.GetKey(KeyCode.W)) movement += transform.forward * speed;
-        else if (Input.GetKey(KeyCode.S)) movement += transform.forward * -speed;
-        if (Input.GetKey(KeyCode.D)) movement += transform.right * speed;
-        else if (Input.GetKey(KeyCode.A)) movement += transform.right * -speed;
+		{   // Translation
+            float moveX = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+            float moveY = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
 
-        movement.x *= transform.localScale.x;
-        movement.y *= transform.localScale.y;
-        movement.z *= transform.localScale.z;
+            controller.Move((transform.forward * moveY + transform.right * moveX) * transform.localScale.magnitude);
+		}
 
-        rigidbody.AddForce(movement * Time.deltaTime);
+		{   // Rotation
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * angularSpeed;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * angularSpeed;
+            cameraPitch = Mathf.Clamp(cameraPitch - mouseY, -90.0f, 90.0f);
 
-        float xRotation = camera.transform.localEulerAngles.x;
-		float yRotation = transform.localRotation.eulerAngles.y;
+            playerCamera.transform.localRotation = Quaternion.Euler(cameraPitch, 0.0f, 0.0f);
+            transform.Rotate(0.0f, mouseX, 0.0f);
+		}
 
-		yRotation += mouseX;
-
-        xRotation -= mouseY;
-        
-
-        transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
-        camera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+		{   // Pickup
+            if (Input.GetKeyDown(KeyCode.E))
+			{
+                if (heldObject)
+				{
+                    heldObject.useGravity = true;
+                    heldObject = null;
+				}
+				else if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, maxReach, LayerMask.GetMask("Interactable")))
+				{
+                    heldObject = hit.rigidbody;
+                    heldObject.useGravity = false;
+				}
+			}
+		}
     }
+
+	private void FixedUpdate()
+	{
+        if (heldObject)
+		{
+            heldObject.velocity = (holdPoint.position - heldObject.position) * 10.0f;
+		}
+
+	}
 }

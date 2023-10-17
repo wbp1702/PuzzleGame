@@ -10,6 +10,8 @@ public class DuplicationVolume : MonoBehaviour
 
 	[Tooltip("The duplication volume that this volume will duplicate to and vise versa.")]
 	public DuplicationVolume twin;
+
+	public LayerMask layerMask;
 	
 	private Dictionary<GameObject, GameObject> duplicates = new();
 
@@ -22,7 +24,7 @@ public class DuplicationVolume : MonoBehaviour
 			GameObject original = pair.Key;
 			GameObject duplicate = pair.Value;
 
-			if (!original.activeInHierarchy || original.layer != LayerMask.NameToLayer("Duplicatable"))
+			if (!original.activeInHierarchy || (1 << original.layer & layerMask) == 0)
 			{
 				toRemove.Add(original);
 				continue;
@@ -45,12 +47,12 @@ public class DuplicationVolume : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("Duplicatable") && !duplicates.ContainsKey(other.gameObject)) AddDuplicate(other.gameObject);
+		if ((1 << other.gameObject.layer & layerMask) != 0 && !duplicates.ContainsKey(other.gameObject)) AddDuplicate(other.gameObject);
     }
 
 	private void OnTriggerExit(Collider other)
 	{
-		if (other.gameObject.layer != LayerMask.NameToLayer("Duplicatable")) return;
+		if ((1 << other.gameObject.layer & layerMask) == 0) return;
 
 		if (duplicates.Remove(other.gameObject, out GameObject duplicate)) Destroy(duplicate);
 	}
