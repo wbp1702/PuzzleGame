@@ -10,4 +10,5 @@ public enum NamedColor
     Red = 1,
     Blue = 2,
     Green = 4,
+    Everything = 7,
 }

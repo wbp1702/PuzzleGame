@@ -28,18 +28,37 @@ public class TeleportVolume : MonoBehaviour
 
     private void ShouldTeleport(Collider other)
     {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Duplicates")) return;
+
         foreach (var collider in colliders)
         {
             if (collider.bounds.Contains(other.gameObject.transform.position))
             {
                 CharacterController controller = other.GetComponent<CharacterController>();
+                Player player = other.GetComponent<Player>();
 
                 var relativePosition = transform.InverseTransformPoint(other.transform.position);
-                Quaternion relativeRotation = Quaternion.FromToRotation(transform.forward, relativeDestination.transform.forward);
+                //Quaternion relativeRotation = Quaternion.FromToRotation(transform.forward, relativeDestination.transform.forward);
+                Quaternion relativeRotation = relativeDestination.transform.rotation * Quaternion.Inverse(transform.rotation);
 
                 var desiredLossy = globalScale * other.transform.lossyScale;
 
                 if (controller) controller.enabled = false;
+
+                Vector3 velocity = new();
+                Vector3 angularVelocity = new();
+                if (other.attachedRigidbody)
+                {
+                    velocity = other.attachedRigidbody.velocity;
+                    angularVelocity = other.attachedRigidbody.angularVelocity;
+                }
+
+                Transform heldObjectParent = null;
+                if (player && player.heldObject)
+				{
+                    heldObjectParent = player.heldObject.transform.parent;
+                    player.heldObject.transform.parent = player.transform;
+				}
 
                 other.transform.localScale = Vector3.one;
                 var otherScale = other.transform.lossyScale;
@@ -50,17 +69,28 @@ public class TeleportVolume : MonoBehaviour
 
                 if (controller) controller.enabled = true;
 
-                Rigidbody rigidbody = other.GetComponent<Rigidbody>();
-                if (rigidbody)
+                if (player && player.heldObject)
 				{
-                    var velocity = rigidbody.velocity * globalScale;
-                    var angularVelocity = rigidbody.angularVelocity;
+                    player.heldObject.transform.parent = heldObjectParent;
+                }
 
-                    rigidbody.isKinematic = true;
-                    rigidbody.velocity = relativeRotation * velocity;
-                    rigidbody.angularVelocity = relativeRotation * angularVelocity;
-                    rigidbody.isKinematic = false;
-				}
+    //            Rigidbody rigidbody = other.GetComponent<Rigidbody>();
+    //            if (rigidbody)
+				//{
+    //                velocity = rigidbody.velocity * globalScale;
+    //                angularVelocity = rigidbody.angularVelocity;
+
+    //                rigidbody.isKinematic = true;
+    //                rigidbody.velocity = relativeRotation * velocity;
+    //                rigidbody.angularVelocity = relativeRotation * angularVelocity;
+    //                rigidbody.isKinematic = false;
+				//}
+
+                if (other.attachedRigidbody)
+                {
+                    other.attachedRigidbody.velocity = relativeRotation * velocity;
+                    other.attachedRigidbody.angularVelocity = relativeRotation * angularVelocity;
+                }
 
                 if (!controller && duplicationVolume) duplicationVolume.AddDuplicate(other.gameObject);
                 //Debug.Break();

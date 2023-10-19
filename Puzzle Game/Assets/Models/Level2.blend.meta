@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b179ce341e0bd3e4da238b546306c453
+guid: d509e39637dee9b43ade0b0b3ec19170
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -17,13 +17,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Floor
-    second: {fileID: 2100000, guid: 01f1c91fcd5666b489c366aedc0914c3, type: 2}
+      name: Firepit
+    second: {fileID: 2100000, guid: bfdf245ae403e3f46984cd64ea4c5a1d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Pillar 5.001
-    second: {fileID: 2100000, guid: 50039411cdcef604fbd613dea3b04e8e, type: 2}
+      name: Floor
+    second: {fileID: 2100000, guid: 70d2c8362b7e4494184c1131d5187299, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Pillar 5
+    second: {fileID: 2100000, guid: 01f1c91fcd5666b489c366aedc0914c3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

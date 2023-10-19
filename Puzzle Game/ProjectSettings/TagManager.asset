@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Red
   - Blue
+  - Green
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Duplicatable
+  - Duplicates
   - Water
   - UI
   - Interactable

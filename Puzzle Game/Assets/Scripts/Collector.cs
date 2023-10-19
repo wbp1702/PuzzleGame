@@ -5,9 +5,12 @@ using UnityEngine.Events;
 
 public class Collector : MonoBehaviour
 {
+	public NamedColor usableColorMask;
+
 	private void OnTriggerEnter(Collider other)
 	{
-		Manager.ActivateColor(System.Enum.Parse<NamedColor>(other.tag));
+		NamedColor color = System.Enum.Parse<NamedColor>(other.tag);
+		if ((color & usableColorMask) != NamedColor.None) Manager.ActivateColor(color);
 	}
 
 	private void OnTriggerStay(Collider other)
@@ -19,6 +22,7 @@ public class Collector : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
-		Manager.DeactivateColor(System.Enum.Parse<NamedColor>(other.tag));
+		NamedColor color = System.Enum.Parse<NamedColor>(other.tag);
+		if ((color & usableColorMask) != NamedColor.None) Manager.DeactivateColor(color);
 	}
 }

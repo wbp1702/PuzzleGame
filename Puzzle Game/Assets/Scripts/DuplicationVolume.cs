@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 public class DuplicationVolume : MonoBehaviour
 {
@@ -31,7 +30,8 @@ public class DuplicationVolume : MonoBehaviour
 			}
 
 			var relativePosition = transform.InverseTransformPoint(original.transform.position);
-			var relativeRotation = Quaternion.FromToRotation(transform.forward, twin.transform.forward);
+			//var relativeRotation = Quaternion.FromToRotation(transform.forward, twin.transform.forward);
+			var relativeRotation = twin.transform.rotation * Quaternion.Inverse(transform.rotation);
 
 			duplicate.transform.position = twin.transform.TransformPoint(relativePosition);
 			duplicate.transform.rotation = relativeRotation * original.transform.rotation;
@@ -49,6 +49,11 @@ public class DuplicationVolume : MonoBehaviour
 	{
 		if ((1 << other.gameObject.layer & layerMask) != 0 && !duplicates.ContainsKey(other.gameObject)) AddDuplicate(other.gameObject);
     }
+
+	private void OnTriggerStay(Collider other)
+	{
+		if ((1 << other.gameObject.layer & layerMask) != 0 && !duplicates.ContainsKey(other.gameObject)) AddDuplicate(other.gameObject);
+	}
 
 	private void OnTriggerExit(Collider other)
 	{
