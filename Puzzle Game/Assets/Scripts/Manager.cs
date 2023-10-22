@@ -20,6 +20,7 @@ public class Manager : MonoBehaviour
     private ColorPair[] colorPairs;
     [SerializeField]
     private NamedColor colorMask;
+
     private static Manager manager;
     private Stopwatch stopwatch;
 

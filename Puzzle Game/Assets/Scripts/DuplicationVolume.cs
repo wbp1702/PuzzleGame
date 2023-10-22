@@ -18,6 +18,7 @@ public class DuplicationVolume : MonoBehaviour
     {
 		List<GameObject> toRemove = new();
 
+		// Move duplicates relative to originals.
 		foreach (var pair in duplicates)
 		{
 			GameObject original = pair.Key;
@@ -30,7 +31,6 @@ public class DuplicationVolume : MonoBehaviour
 			}
 
 			var relativePosition = transform.InverseTransformPoint(original.transform.position);
-			//var relativeRotation = Quaternion.FromToRotation(transform.forward, twin.transform.forward);
 			var relativeRotation = twin.transform.rotation * Quaternion.Inverse(transform.rotation);
 
 			duplicate.transform.position = twin.transform.TransformPoint(relativePosition);

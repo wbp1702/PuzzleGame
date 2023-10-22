@@ -11,11 +11,11 @@ public class MainMenu : MonoBehaviour
 
     public int levelCount;
 
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
 
+        // Create Level List Elements
 		for (int i = 1; i <= levelCount; i++)
 		{
             var gameObject = Instantiate(levelPrefab, levelSelectContent);
@@ -28,7 +28,7 @@ public class MainMenu : MonoBehaviour
 
             var loadButton = gameObject.transform.Find("Load Button");
             Button button = loadButton.GetComponent<Button>();
-            var index = i;
+            var index = i; // Prevents LoadScene("Level " + i) where i would be levelCount
             button.onClick.AddListener(() => { SceneManager.LoadScene("Level " + index); Time.timeScale = 1f; });
 
             var loadText = loadButton.GetChild(0);

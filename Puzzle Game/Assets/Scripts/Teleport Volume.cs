@@ -38,13 +38,14 @@ public class TeleportVolume : MonoBehaviour
                 Player player = other.GetComponent<Player>();
 
                 var relativePosition = transform.InverseTransformPoint(other.transform.position);
-                //Quaternion relativeRotation = Quaternion.FromToRotation(transform.forward, relativeDestination.transform.forward);
                 Quaternion relativeRotation = relativeDestination.transform.rotation * Quaternion.Inverse(transform.rotation);
 
-                var desiredLossy = globalScale * other.transform.lossyScale;
+                var desiredLossyScale = globalScale * other.transform.lossyScale;
 
+                // Disable character control to prevent strange behavior
                 if (controller) controller.enabled = false;
 
+                // Save velocities if rigidbody is attached.
                 Vector3 velocity = new();
                 Vector3 angularVelocity = new();
                 Rigidbody rigidbody = other.GetComponent<Rigidbody>();
@@ -54,6 +55,7 @@ public class TeleportVolume : MonoBehaviour
                     angularVelocity = rigidbody.angularVelocity;
                 }
 
+                // Set held objects parent to player so that it teleports with the player
                 Transform heldObjectParent = null;
                 if (player && player.heldObject)
 				{
@@ -61,28 +63,21 @@ public class TeleportVolume : MonoBehaviour
                     player.heldObject.transform.parent = player.transform;
 				}
 
+                // Teleport object
                 other.transform.localScale = Vector3.one;
                 var otherScale = other.transform.lossyScale;
 
-                other.transform.localScale = new Vector3(otherScale.x * desiredLossy.x, otherScale.y * desiredLossy.y, otherScale.z * desiredLossy.z);
+                other.transform.localScale = new Vector3(otherScale.x * desiredLossyScale.x, otherScale.y * desiredLossyScale.y, otherScale.z * desiredLossyScale.z);
                 other.transform.position = relativeDestination.transform.TransformPoint(relativePosition);
                 other.transform.rotation = relativeRotation * other.transform.rotation;
 
+                // Enable character control
                 if (controller) controller.enabled = true;
+
+                // Reset parent for held object
                 if (player && player.heldObject) player.heldObject.transform.parent = heldObjectParent;
 
-    //            Rigidbody rigidbody = other.GetComponent<Rigidbody>();
-    //            if (rigidbody)
-				//{
-    //                velocity = rigidbody.velocity * globalScale;
-    //                angularVelocity = rigidbody.angularVelocity;
-
-    //                rigidbody.isKinematic = true;
-    //                rigidbody.velocity = relativeRotation * velocity;
-    //                rigidbody.angularVelocity = relativeRotation * angularVelocity;
-    //                rigidbody.isKinematic = false;
-				//}
-
+                // Apply rotation to rigidbody's velocity
                 if (rigidbody)
                 {
                     rigidbody.isKinematic = true;
@@ -91,9 +86,9 @@ public class TeleportVolume : MonoBehaviour
                     rigidbody.isKinematic = false;
                 }
 
+                // If destination has a duplication volume create a duplicate this frame
                 if (!controller && duplicationVolume) duplicationVolume.AddDuplicate(other.gameObject);
-                //Debug.Break();
-
+                
                 return;
             }
         }
