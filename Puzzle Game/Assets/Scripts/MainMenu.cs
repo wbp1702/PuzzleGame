@@ -35,4 +35,9 @@ public class MainMenu : MonoBehaviour
             loadText.GetComponent<Text>().text = "Load Level " + i;
         }
     }
+
+    public void ExitGame()
+	{
+        Application.Quit();
+	}
 }

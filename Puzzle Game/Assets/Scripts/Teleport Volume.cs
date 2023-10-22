@@ -47,10 +47,11 @@ public class TeleportVolume : MonoBehaviour
 
                 Vector3 velocity = new();
                 Vector3 angularVelocity = new();
-                if (other.attachedRigidbody)
+                Rigidbody rigidbody = other.GetComponent<Rigidbody>();
+                if (rigidbody)
                 {
-                    velocity = other.attachedRigidbody.velocity;
-                    angularVelocity = other.attachedRigidbody.angularVelocity;
+                    velocity = rigidbody.velocity;
+                    angularVelocity = rigidbody.angularVelocity;
                 }
 
                 Transform heldObjectParent = null;
@@ -68,11 +69,7 @@ public class TeleportVolume : MonoBehaviour
                 other.transform.rotation = relativeRotation * other.transform.rotation;
 
                 if (controller) controller.enabled = true;
-
-                if (player && player.heldObject)
-				{
-                    player.heldObject.transform.parent = heldObjectParent;
-                }
+                if (player && player.heldObject) player.heldObject.transform.parent = heldObjectParent;
 
     //            Rigidbody rigidbody = other.GetComponent<Rigidbody>();
     //            if (rigidbody)
@@ -86,10 +83,12 @@ public class TeleportVolume : MonoBehaviour
     //                rigidbody.isKinematic = false;
 				//}
 
-                if (other.attachedRigidbody)
+                if (rigidbody)
                 {
-                    other.attachedRigidbody.velocity = relativeRotation * velocity;
-                    other.attachedRigidbody.angularVelocity = relativeRotation * angularVelocity;
+                    rigidbody.isKinematic = true;
+                    rigidbody.velocity = relativeRotation * (velocity * globalScale);
+                    rigidbody.angularVelocity = relativeRotation * (angularVelocity * globalScale);
+                    rigidbody.isKinematic = false;
                 }
 
                 if (!controller && duplicationVolume) duplicationVolume.AddDuplicate(other.gameObject);

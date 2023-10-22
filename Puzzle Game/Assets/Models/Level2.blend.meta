@@ -13,7 +13,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DefaultMat
-    second: {fileID: 2100000, guid: 2e77db148f4043e4c96b8245a84667dd, type: 2}
+    second: {fileID: 2100000, guid: 01f1c91fcd5666b489c366aedc0914c3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -29,6 +29,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Pillar 5
     second: {fileID: 2100000, guid: 01f1c91fcd5666b489c366aedc0914c3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rocks
+    second: {fileID: 2100000, guid: 2e77db148f4043e4c96b8245a84667dd, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
